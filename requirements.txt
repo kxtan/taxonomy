@@ -4,3 +4,4 @@ click==8.0.3
 black==21.11b1
 pytest==6.2.5
 pytest-cov==3.0.0
+flair==0.10
