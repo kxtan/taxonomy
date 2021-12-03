@@ -1,6 +1,6 @@
 from flair.data import Sentence
 from flair.models import SequenceTagger
-from flair.tokenization import Tokenizer, SciSpacyTokenizer
+from flair.tokenization import SciSpacyTokenizer
 
 class FlairMethod():
 
@@ -14,31 +14,28 @@ class FlairMethod():
         """Check if tokenizer has been created"""
 
         if self.tokenizer is None:
-            return False
+            raise MissingTokenizerError()
         return True
 
     def has_tagger(self) -> bool:
         """Check if tagger has been created"""
 
         if self.tagger is None:
-            return False
+            raise MissingTaggerError()
         return True
 
     def sanity_check(self) -> bool:
         """Sanity check before running operations"""
 
-        if not self.has_tagger():
-            return False #TODO: raise error
-
-        if not self.has_tokenizer():
-            return False
-        
+        self.has_tagger()
+        self.has_tokenizer()
+            
         return True
 
-    def use_base_tokenizer(self) -> None:
-        """Create base tokenizer"""
+    # def use_base_tokenizer(self) -> None:
+    #     """Create base tokenizer"""
 
-        self.tokenizer = Tokenizer()
+    #     self.tokenizer = Tokenizer()
 
     def use_scispacy_tokenizer(self) -> None:
         """Create SciSpacy tokenizer"""
@@ -53,9 +50,7 @@ class FlairMethod():
     def generate_keywords(self, sentence_dict) -> dict:
         """"Generate keywords dictionary given a list of sentences"""
 
-        if not self.sanity_check(): #TODO: convert to single call 
-            return {}
-
+        self.sanity_check() 
         output_dict = dict.fromkeys(list(sentence_dict.keys()))
 
         for sentence_id, sentence in sentence_dict.items():
@@ -72,3 +67,11 @@ class FlairMethod():
                     output_dict[sentence_id] = [keyword_label_tuple]
 
         return output_dict
+
+class MissingTokenizerError(Exception):
+    """Simple exception for missing tokenizer"""
+    pass
+
+class MissingTaggerError(Exception):
+    """Simple exception for missing tagger"""
+    pass
