@@ -69,10 +69,8 @@ class FlairMethod():
     def __str__(self) -> str:
         return "Flair"
 
-class MissingTokenizerError(Exception):
+class MissingTokenizerError(Exception): 
     """Simple exception for missing tokenizer"""
-    pass
 
 class MissingTaggerError(Exception):
     """Simple exception for missing tagger"""
-    pass

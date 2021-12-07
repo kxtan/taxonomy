@@ -29,22 +29,21 @@ def keywords(fileinput, fileoutput, identifier, textcolumn, method, outputstyle)
     click.echo(f"Reading file from : {fileinput}")
     input_df = util.read_file(fileinput)
     
-    click.echo(f"Processing file...")
+    click.echo("Processing file...")
     if identifier is None:
         identifier = "id"
     if textcolumn is None:
         textcolumn = "text"
 
-    input_df.to_csv("what.csv")
     text_dict = util.generate_text_dict(input_df, identifier, textcolumn)
 
     keywords_dict = {}
 
     if method is None:
-        click.echo(f"Defaulting to using Flair to generate keywords")
+        click.echo("Defaulting to using Flair to generate keywords")
         method = "flair"
 
-    click.echo(f"Generating keywords...")
+    click.echo("Generating keywords...")
 
     if method == "flair":
         with click_spinner.spinner():
@@ -56,7 +55,7 @@ def keywords(fileinput, fileoutput, identifier, textcolumn, method, outputstyle)
     keywords_df = util.keywords_to_df(keywords_dict)
 
     if outputstyle is None:
-        click.echo(f"Defaulting to compact output")
+        click.echo("Defaulting to compact output")
         outputstyle = "compact"
 
     if outputstyle == "compact":
