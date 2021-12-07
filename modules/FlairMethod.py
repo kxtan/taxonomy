@@ -32,11 +32,6 @@ class FlairMethod():
             
         return True
 
-    # def use_base_tokenizer(self) -> None:
-    #     """Create base tokenizer"""
-
-    #     self.tokenizer = Tokenizer()
-
     def use_scispacy_tokenizer(self) -> None:
         """Create SciSpacy tokenizer"""
 
@@ -51,22 +46,28 @@ class FlairMethod():
         """"Generate keywords dictionary given a list of sentences"""
 
         self.sanity_check() 
-        output_dict = dict.fromkeys(list(sentence_dict.keys()))
+        output_lst = []       
+        
+        for sentence_id, text in sentence_dict.items():
 
-        for sentence_id, sentence in sentence_dict.items():
-
-            sentence = Sentence(sentence, use_tokenizer=self.tokenizer)
+            sentence = Sentence(text, use_tokenizer=self.tokenizer)
             self.tagger.predict(sentence)
 
             for entity in sentence.get_spans():
-                keyword_label_tuple = (entity.to_original_text(), str(entity.get_labels()[0]))
-                
-                if output_dict[sentence_id] is not None:
-                    output_dict[sentence_id].append(keyword_label_tuple)
-                else:
-                    output_dict[sentence_id] = [keyword_label_tuple]
+                info_dict = {
+                    "text_id"   : sentence_id,
+                    "text"      : text,
+                    "keyword"   : entity.to_original_text(), 
+                    "label"     : str(entity.get_labels()[0]),
+                    "method"    : str(self),
+                }
 
-        return output_dict
+                output_lst.append(info_dict)        
+                
+        return output_lst
+
+    def __str__(self) -> str:
+        return "Flair"
 
 class MissingTokenizerError(Exception):
     """Simple exception for missing tokenizer"""
