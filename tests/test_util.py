@@ -6,6 +6,13 @@ import sys
 sys.path.append("..")
 from modules import util
 
-def sample_test():
+def test_read_file():
+    file = util.read_file("data/test_sample.tsv")
+    assert file is not None
 
-    assert True == True
+def test_generate_text_dict():
+    df = util.read_file("data/test_sample.tsv")
+    dct = util.generate_text_dict(df, "id", "text")
+
+    assert type(dct) == dict
+
