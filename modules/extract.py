@@ -1,4 +1,4 @@
-from .FlairMethod import FlairMethod
+from modules.FlairMethod import FlairMethod
 
 
 def flair_keywords(text_dict):
